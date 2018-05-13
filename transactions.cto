@@ -1,4 +1,4 @@
-namespace com.chaincontrol.assets
+namespace com.chaincontrol.transactions
 
     
 user Administrator identified by administratorID{
