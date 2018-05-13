@@ -1,53 +1,12 @@
 namespace com.chaincontrol.transactions
-
-    
-user Administrator identified by administratorID{
-  o String administratorID
-  o String firstName
-  o String lastName
-  o String badge
-  --> Precinct jurisdiction
-}
-
-user Officer identified by officerID{
-  o String officerID
-  o String firstName
-  o String lastName
-  o String badge
-  --> Precinct employed //differ empl precinct vs precinct access
-  --> Precinct[] pAuth
-  --> Case[] cAuth
-  --> Evidence[] eAuth
-}
-
-user CheckoutMgmt identified by checkoutMgmtID{
-  o String checkoutMgmtID
-  --> Officer officerID
-  --> Precinct employed
-}
-
-user Participant identified by participantID{
-  o String participantID
-  o String firstName
-  o String lastName
-  o String affiliation
-  --> Case[] cAuth
-  --> Evidence[] eAuth
-}
-
-enum OfficerType{
-    o ADMINISTRATOR
-    o OFFICER
-    o CHECKOUT
-}
+import com.chaincontrol.assets
+import com.chaincontrol.participants
 
 transaction ReNameCase {
     --> Case myCase
     o String newName
     o String oldName optional
 }
-
-
 
 event PrecinctAuthGranted {
   --> Precinct asset
