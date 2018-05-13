@@ -1,6 +1,7 @@
 namespace com.chaincontrol.transactions
-import com.chaincontrol.assets
-import com.chaincontrol.participants
+
+import com.chaincontrol.assets.* 
+import com.chaincontrol.participants.*
 
 transaction ReNameCase {
     --> Case myCase
@@ -36,7 +37,7 @@ event EvidenceAccessed {
 event AdministratorAction {
   --> Administrator administratorID
   --> Officer requestor //officer or participant
-  --> Transaction transactionID
+  o String transactionID
   o Boolean approved
   o String notes
 }

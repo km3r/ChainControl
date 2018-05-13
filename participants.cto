@@ -1,5 +1,6 @@
 namespace com.chaincontrol.participants
-import com.chaincontrol.assets
+
+import com.chaincontrol.assets.*
 
 enum UserType{
     o ADMINISTRATOR
@@ -30,6 +31,8 @@ participant ThirdParty extends user{
 
 participant CheckoutMgmt extends Officer{
   o String checkoutMgmtID
-  --> Officer officerID
-  --> Precinct employed
+}
+
+participant Administrator extends Officer{
+  o String checkoutMgmtID
 }
