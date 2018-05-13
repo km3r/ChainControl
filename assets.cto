@@ -1,13 +1,15 @@
 namespace com.chaincontrol.assets
 
+import com.chaincontrol.participants.*
+
 enum EvidenceType {
     o DIGITAL
     o PHYSICAL
     o DOCUMENT
 }
 
-asset Precinct identified by precinctNumber {
-    o String precinctNumber
+asset Precinct identified by precinctID {
+    o String precinctID
     o String name
     o String location
     --> Case[] cases
@@ -32,3 +34,39 @@ asset Evidence identified by evidenceId {
     --> Case caseOrgin
 }
 
+enum requestState{
+  o Approved
+  o Denied
+  o Pending
+}
+
+enum permissionType{
+  o Access   //viewership
+  o Authorization   //add cases and or transactions
+}
+
+asset PrecinctPermission identified by requestID {
+  o String requestID
+  o requestState status
+  o permissionType permission
+  --> user requestorID
+  --> user authorizerID
+  --> Precinct pAuth //or pAccess
+}
+
+asset CasePermission identified by requestID {
+  o String requestID
+  o requestState status
+  o permissionType permission
+  --> user requestorID
+  --> user authorizerID
+  --> Case cAuth //or cAccess
+}
+
+asset EvidencePermission identified by requestID {
+  o String requestID
+  o requestState status
+  --> user requestorID
+  --> user authorizerID
+  --> Evidence eAuth
+}
