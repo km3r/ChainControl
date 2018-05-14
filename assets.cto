@@ -16,7 +16,7 @@ asset Precinct identified by precinctID {
 }
 
 asset Case identified by caseId {
-    o String caseId
+    o String caseID
     o String name
     o String description
     o Boolean open
@@ -24,8 +24,8 @@ asset Case identified by caseId {
     --> Precinct homePrecinct 
 }
 
-asset Evidence identified by evidenceId {
-    o String evidenceId
+asset Evidence identified by evidenceID {
+    o String evidenceID
     o String name
     o String description
     o String hash optional
@@ -42,13 +42,15 @@ enum requestState{
 
 enum permissionType{
   o Access   //viewership
-  o Authorization   //add cases and or transactions
+  o Authorization extends Access   //add cases and or transactions
+  o TypeAccess                      //only for EvidencePermission
+  o PhysicalCheckout extends Access //only for EvidencePermission
 }
 
 asset PrecinctPermission identified by requestID {
   o String requestID
-  o requestState status
-  o permissionType permission
+  o requestState status default = Pending
+  o permissionType permission default = Access
   --> user requestorID
   --> user authorizerID
   --> Precinct pAuth //or pAccess
@@ -56,17 +58,25 @@ asset PrecinctPermission identified by requestID {
 
 asset CasePermission identified by requestID {
   o String requestID
-  o requestState status
-  o permissionType permission
+  o requestState status default = Pending
+  o permissionType permission default = Access
   --> user requestorID
   --> user authorizerID
-  --> Case cAuth //or cAccess
+  --> Case cAuth //or cAccess... check permission var to determine adding caseID to cAuth[] or cAccess[]
 }
 
 asset EvidencePermission identified by requestID {
   o String requestID
-  o requestState status
+  o requestState status default = Pending
+  o permissionType permission default = Access
   --> user requestorID
   --> user authorizerID
-  --> Evidence eAuth
+  --> Evidence eAuth //or evidenceType access
+}
+
+asset EvidenceCheckout identified by requestID{
+  o String requestID
+  --> user requestorID
+  --> user authorizerID
+  --> Evidence evidenceID //check evidenceType (physical vs digital) and check accessAvailable
 }

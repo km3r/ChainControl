@@ -9,6 +9,31 @@ transaction ReNameCase {
     o String oldName optional
 }
 
+transaction requestPrecinctPermission { //specify precinct and request for authorization or access
+    o permissionType type
+    --> PrecinctPermission request
+    --> user requestor
+}
+
+transaction requestCasePermission { //specify case and request for authorization or access
+  o permissionType type //access to view, authorization to add 
+  o String caseID //specify case#
+  --> CasePermission request
+  --> user requestor
+}
+
+transaction requestEvidencePermission {
+  o permissionType type //access to view list, authorization to checkout, 
+  --> EvidencePermission request
+  --> user requestor
+}
+
+transaction physicalCheckout{
+  o String checkOutDuration
+  --> Evidence evidenceID
+  --> user requestor
+  --> user checkoutMGMT
+}
 event PrecinctAuthGranted {
   --> Precinct asset
   --> Officer pAuth

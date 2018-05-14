@@ -25,14 +25,17 @@ participant Officer extends user{
 
 participant ThirdParty extends user{
   o String affiliation
+  o String govIssuedIDtype
+  o String govIssuedIDnum
   --> Case[] cAuth
   --> Evidence[] eAuth
 }
 
 participant CheckoutMgmt extends Officer{
-  o String checkoutMgmtID
+  o String evidenceLocker
+  o Boolean active
 }
 
 participant Administrator extends Officer{
-  o String checkoutMgmtID
+
 }
