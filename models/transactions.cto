@@ -1,0 +1,96 @@
+namespace com.chaincontrol.transactions
+
+import com.chaincontrol.assets.* 
+import com.chaincontrol.participants.*
+
+transaction ReNameCase {
+    --> Case myCase
+    o String newName
+    o String oldName optional
+}
+
+transaction objectPermission { //specify permission parameters (asset type and ID, permission level)
+  o permissionAsset object //asset for permission (precinct, case, or asset)
+  o permissionType permission //access to view, authorization to add 
+  o String objectID //specify object ID. . . return invalid if object type doesn't correlate with ID
+  --> PermissionRequest request
+  --> user requestor
+}
+
+transaction modifyPermission{
+  --> user modified //officer or user subject to permission change
+  --> user modifier //ADMIN submitting transaction to stripped
+  o permissionType newPermission
+  o permissionAsset object
+  o String objectID //ID of asset for new permission level
+}
+
+transaction migrateOfficer{ //ADMIN - change officer's employment precinct
+  --> Precinct newPrecinct
+  --> Precinct oldPrecinct
+  --> user officer
+}
+
+transaction nullifyOfficer{ //ADMIN - officer fired or permissions stripped
+  --> user officer
+}
+
+transaction physicalCheckoutRequest{
+  o String duration
+  --> Evidence evidenceID
+  --> user requestor
+}
+
+transaction physicalCheckoutUpdate{
+  o checkoutNote status
+  --> user checkoutMGMT
+}
+
+transaction newCase{  //OFFICER - add case to precinct
+  --> Case newCase
+  --> Precinct precinct
+}
+
+transaction newEvidence{  //OFFICER - add evidence to case (req cAuth)
+  --> Evidence newEvidence
+  --> Case inCase
+}
+
+transaction closeCase{ //ADMIN - mark case as closed (change 'open' boolean to false)
+  --> Case caseID
+  --> user closer
+}
+
+
+event PrecinctAuthGranted {
+  --> Precinct asset
+  --> Officer pAuth
+  o String newValue
+}
+
+event EvidenceCheckedOut {
+  --> Evidence checkedOut
+  --> Officer checkedOutBy
+  o String newValue
+  o String checkOutDuration
+}
+
+event EvidenceReturned {
+  --> Evidence checkedOut
+  o String newValue
+}
+
+event EvidenceAccessed {
+  --> Evidence evidenceID
+  --> Officer officerID //officer or participant?
+  --> Participant participantID
+  o String notes
+}
+
+event AdministratorAction {
+  --> Administrator administratorID
+  --> Officer requestor //officer or participant
+  o String transactionID
+  o Boolean approved
+  o String notes
+}
