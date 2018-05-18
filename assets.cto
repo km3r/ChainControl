@@ -19,6 +19,7 @@ asset Case identified by caseId {
     o String caseID
     o String name
     o String description
+    o String createdBy
     o Boolean open
     --> Evidence[] caseEvidence
     --> Precinct homePrecinct 
@@ -41,10 +42,11 @@ enum requestState{
 }
 
 enum permissionType{
-  o Access   //viewership
-  o Authorization extends Access   //add cases and or transactions
-  o TypeAccess                      //only for EvidencePermission
-  o PhysicalCheckout extends Access //only for EvidencePermission
+  o None
+  o Access   //viewership and checkout
+  o Authorization   //add cases and or transactions
+  o TypeAccess       //only for EvidencePermission
+  o PhysicalCheckout //only for EvidencePermission
 }
 
 asset PrecinctPermission identified by requestID {
