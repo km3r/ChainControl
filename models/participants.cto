@@ -13,6 +13,7 @@ participant user identified by userID {
   o String userID
   o String firstName
   o String lastName
+  o Boolean disabled default = false
 }
 
 participant Officer extends user{

@@ -9,10 +9,10 @@ transaction ReNameCase {
     o String oldName optional
 }
 
-transaction objectPermission { //specify permission parameters (asset type and ID, permission level)
+transaction objectPermission { //specify perm parameters (asset type and ID, perm level)
   o permissionAsset object //asset for permission (precinct, case, or asset)
   o permissionType permission //access to view, authorization to add 
-  o String objectID //specify object ID. . . return invalid if object type doesn't correlate with ID
+  o String objectID //specify object ID... return invalid if object type doesn't correlate with ID
   --> PermissionRequest request
   --> user requestor
 }
