@@ -9,23 +9,29 @@ transaction ReNameCase {
     o String oldName optional
 }
 
-transaction requestPrecinctPermission { //specify precinct and request for authorization or access
-    o permissionType type
-    --> PrecinctPermission request
-    --> user requestor
-}
-
-transaction requestCasePermission { //specify case and request for authorization or access
-  o permissionType type //access to view, authorization to add 
-  o String caseID //specify case#
-  --> CasePermission request
+transaction objectPermission { //specify permission parameters (asset type and ID, permission level)
+  o permissionAsset object //asset for permission (precinct, case, or asset)
+  o permissionType permission //access to view, authorization to add 
+  o String objectID //specify object ID. . . return invalid if object type doesn't correlate with ID
+  --> PermissionRequest request
   --> user requestor
 }
 
-transaction requestEvidencePermission {
-  o permissionType type //access to view list, authorization to checkout, 
-  --> EvidencePermission request
-  --> user requestor
+transaction modifyPermission{
+  --> user modified //officer or user subject to permission change
+  --> user modifier //ADMIN submitting transaction to stripped
+  --> permissionType permission
+  --> permissionAsset object
+}
+
+transaction migrateOfficer{ //ADMIN - change officer's employment precinct
+  --> Precinct newPrecinct
+  --> Precinct oldPrecinct
+  --> user officer
+}
+
+transaction nullifyOfficer{ //ADMIN - officer fired or permissions stripped
+  --> user officer
 }
 
 transaction physicalCheckout{
@@ -34,6 +40,17 @@ transaction physicalCheckout{
   --> user requestor
   --> user checkoutMGMT
 }
+
+transaction newCase{  //OFFICER - add case to precinct
+  --> Case newCase
+  --> Precinct precinct
+}
+
+transaction newEvidence{  //OFFICER - add evidence to case (req cAuth)
+  --> Evidence newEvidence
+}
+
+
 event PrecinctAuthGranted {
   --> Precinct asset
   --> Officer pAuth
