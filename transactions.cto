@@ -20,8 +20,9 @@ transaction objectPermission { //specify permission parameters (asset type and I
 transaction modifyPermission{
   --> user modified //officer or user subject to permission change
   --> user modifier //ADMIN submitting transaction to stripped
-  --> permissionType permission
-  --> permissionAsset object
+  o permissionType newPermission
+  o permissionAsset object
+  o String objectID //ID of asset for new permission level
 }
 
 transaction migrateOfficer{ //ADMIN - change officer's employment precinct
@@ -34,10 +35,14 @@ transaction nullifyOfficer{ //ADMIN - officer fired or permissions stripped
   --> user officer
 }
 
-transaction physicalCheckout{
-  o String checkOutDuration
+transaction physicalCheckoutRequest{
+  o String duration
   --> Evidence evidenceID
   --> user requestor
+}
+
+transaction physicalCheckoutUpdate{
+  o checkoutNote status
   --> user checkoutMGMT
 }
 
@@ -48,6 +53,12 @@ transaction newCase{  //OFFICER - add case to precinct
 
 transaction newEvidence{  //OFFICER - add evidence to case (req cAuth)
   --> Evidence newEvidence
+  --> Case inCase
+}
+
+transaction closeCase{ //ADMIN - mark case as closed (change 'open' boolean to false)
+  --> Case caseID
+  --> user closer
 }
 
 

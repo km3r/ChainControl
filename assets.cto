@@ -74,8 +74,16 @@ asset EvidencePermission extends PermissionRequest{
   --> Evidence eAuth //or evidenceType access
 }
 
+enum checkoutNote{
+  o Requested
+  o Approved
+  o Withdrawn
+  o Returned
+}
 asset EvidenceCheckout identified by requestID {
   o String requestID
+  o checkoutNote status default = 'Requested'
+  o String returnBy
   --> user requestorID
   --> user authorizerID
   --> Evidence evidenceID //check evidenceType (physical vs digital) and check accessAvailable
