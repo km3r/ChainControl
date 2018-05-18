@@ -28,7 +28,7 @@
       "composer",
       "composer-network"
     ],
-    "author": "Hyperledger Composer",
+    "author": "Kyle Rosenthal & Lorenzo Lynberg",
     "license": "Apache-2.0",
     "devDependencies": {
       "chai": "^3.5.0",
