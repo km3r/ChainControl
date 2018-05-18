@@ -18,7 +18,7 @@ participant user identified by userID {
 
 participant Officer extends user{
   o String badge
-  --> Precinct employed //differ empl precinct vs precinct access
+  o Precinct employed //differ empl precinct vs precinct access
   --> Precinct[] pAuth
   --> Case[] cAuth
   --> Evidence[] eAuth

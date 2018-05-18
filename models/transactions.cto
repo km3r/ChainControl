@@ -52,7 +52,8 @@ transaction newCase{  //OFFICER - add case to precinct
 }
 
 transaction newEvidence{  //OFFICER - add evidence to case (req cAuth)
-  --> Evidence newEvidence
+  --> user authorized
+  --> Evidence newEvidence optional
   --> Case inCase
 }
 
