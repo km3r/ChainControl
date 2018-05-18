@@ -15,7 +15,7 @@ asset Precinct identified by precinctID {
     --> Case[] cases
 }
 
-asset Case identified by caseId {
+asset Case identified by caseID {
     o String caseID
     o String name
     o String description
@@ -49,34 +49,32 @@ enum permissionType{
   o PhysicalCheckout //only for EvidencePermission
 }
 
-asset PrecinctPermission identified by requestID {
+enum permissionAsset{
+  o Precinct
+  o Case
+  o Evidence
+}
+abstract asset PermissionRequest identified by requestID{
   o String requestID
-  o requestState status default = Pending
-  o permissionType permission default = Access
+  o permissionAsset object
+  o permissionType permission default = 'Access'
+  o requestState status default = 'Pending'
   --> user requestorID
   --> user authorizerID
+}
+asset PrecinctPermission extends PermissionRequest{
   --> Precinct pAuth //or pAccess
 }
 
-asset CasePermission identified by requestID {
-  o String requestID
-  o requestState status default = Pending
-  o permissionType permission default = Access
-  --> user requestorID
-  --> user authorizerID
+asset CasePermission extends PermissionRequest{
   --> Case cAuth //or cAccess... check permission var to determine adding caseID to cAuth[] or cAccess[]
 }
 
-asset EvidencePermission identified by requestID {
-  o String requestID
-  o requestState status default = Pending
-  o permissionType permission default = Access
-  --> user requestorID
-  --> user authorizerID
+asset EvidencePermission extends PermissionRequest{
   --> Evidence eAuth //or evidenceType access
 }
 
-asset EvidenceCheckout identified by requestID{
+asset EvidenceCheckout identified by requestID {
   o String requestID
   --> user requestorID
   --> user authorizerID
