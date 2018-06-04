@@ -78,7 +78,7 @@ rule OfficerCaseAuth{
     participant (p): "com.chaincontrol.participants.Officer"
     operation: READ, CREATE
     resource(x): "com.chaincontrol.assets.Case"
-    condition: (p.pAuth.indexOf(x.homePrecinct) >= 0)
+    condition: (p.disabled == false && (p.pAuth.indexOf(x.homePrecinct) >= 0))
     action: ALLOW   
 }
 
@@ -87,7 +87,7 @@ rule OfficerEvidenceAuth{
     participant (p): "com.chaincontrol.participants.Officer"
     operation: READ, CREATE
     resource(x): "com.chaincontrol.assets.Evidence"
-    condition: (p.cAuth.indexOf(x.caseOrigin) >= 0)
+    condition: (p.disabled == false && (p.cAuth.indexOf(x.caseOrigin) >= 0))
     action: ALLOW   
 }
 
@@ -96,7 +96,7 @@ rule OfficerPrecinctViewership{
     participant (p): "com.chaincontrol.participants.Officer"
     operation: READ
     resource(x): "com.chaincontrol.assets.Precinct"
-    condition: (p.pAuth.indexOf(x) >= 0)
+    condition: (p.disabled == false && (p.pAuth.indexOf(x) >= 0))
     action: ALLOW
 }
 
@@ -105,7 +105,7 @@ rule ThirdPartyCaseAccess{
     participant (p): "com.chaincontrol.participants.ThirdParty"
     operation: READ
     resource(x): "com.chaincontrol.assets.Case"
-    condition: (p.cAuth.indexOf(x) >= 0)
+    condition: (p.disabled == false && (p.cAuth.indexOf(x) >= 0))
     action: ALLOW  
 }
 
@@ -114,6 +114,6 @@ rule ThirdPartyEvidenceAccess{
     participant (p): "com.chaincontrol.participants.ThirdParty"
     operation: READ
     resource(x): "com.chaincontrol.assets.Evidence"
-    condition: ((p.cAuth.indexOf(x.caseOrigin) >= 0) || (p.eAuth.indexOf(x) >=0))
+    condition: (p.disabled == false && ((p.cAuth.indexOf(x.caseOrigin) >= 0) || (p.eAuth.indexOf(x) >=0)))
     action: ALLOW 
-}
+}.
