@@ -67,19 +67,18 @@
 rule AdminAllAccesss{
       description: "Administrators all access"
       participant: "com.chaincontrol.participants.Administrator"
-      operation: READ CREATE UPDATE
+      operation: READ, CREATE, UPDATE
       resource: "com.chaincontrol.assets"
       transaction: "com.chaincontrol.transactions"
-      condition: (resource != Precinct) && (participant.pAuth.indexOf[asset.homePrecinct] >= 0)
+      condition: ((resource != Precinct) && (participant.pAuth.indexOf[asset.homePrecinct] >= 0))
       action: ALLOW
 }
 
 rule OfficerAuth{
     description: "Officers can create and read cases and evidence within their precincts"
     participant (p): "com.chaincontrol.participants.Officer"
-    operation: READ CREATE
+    operation: READ, CREATE
     resource(x): "com.chaincontrol.assets.Case"
-    resource(y): "com.chaincontrol.assets.Evidence"
     condition: (p.pAuth.indexOf(x.homePrecinct) >= 0)
     action: ALLOW   
 }
