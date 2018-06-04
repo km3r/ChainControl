@@ -116,4 +116,32 @@ rule ThirdPartyEvidenceAccess{
     resource(x): "com.chaincontrol.assets.Evidence"
     condition: (p.disabled == false && ((p.cAuth.indexOf(x.caseOrigin) >= 0) || (p.eAuth.indexOf(x) >=0)))
     action: ALLOW 
-}.
+}
+
+rule EverybodyPermissionRequests{
+    description: "Any active user can request permissions"
+    participant (p): "com.chaincontrol.participants.**"
+    operation: CREATE
+    resource(x): "com.chaincontrol.assets.PermissionRequest"
+    condition: (p.disabled == false)
+    action: ALLOW
+}
+
+rule onlyCheckoutMgmt{
+    description: "Only on-duty CheckoutMgmt users can update physical evidence checkout requests"
+    participant (p): "com.chaincontrol.participants.CheckoutMgmt"
+    operation: UPDATE
+    resource(x): "com.chaincontrol.assets.EvidenceCheckout"
+    condition: (p.onDuty == true)
+    action: ALLOW
+}
+
+rule onlyAuthorizedCheckoutRequests{
+    description: "Users may only create a checkout request for authorized evidence"
+    participant (p): "com.chaincontrol.participants.**"
+    operation: CREATE
+    resource(x): "com.chaincontrol.assets.CheckoutRequest"
+    transaction(tx): "com.chaincontrol.transactions.physicalCheckoutRequest"
+    condition: (p.disabled == false && ((p.eAuth.indexOf(tx.evidenceID) >= 0) || (p.cAuth.indexOf(tx.evidenceID.caseOrigin) >=0))) //either evidence explicitly in eAuth array or case within cAuth jurisdiction
+    action: ALLOW 
+}
