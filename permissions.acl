@@ -69,16 +69,51 @@ rule AdminAllAccesss{
       participant: "com.chaincontrol.participants.Administrator"
       operation: READ, CREATE, UPDATE
       resource: "com.chaincontrol.assets"
-      transaction: "com.chaincontrol.transactions"
-      condition: ((resource != Precinct) && (participant.pAuth.indexOf[asset.homePrecinct] >= 0))
+      condition: ((resource != Precinct) && (participant.pAuth.indexOf(asset.homePrecinct) >= 0))
       action: ALLOW
 }
 
-rule OfficerAuth{
-    description: "Officers can create and read cases and evidence within their precincts"
+rule OfficerCaseAuth{
+    description: "Officers can create and read cases within their precincts"
     participant (p): "com.chaincontrol.participants.Officer"
     operation: READ, CREATE
     resource(x): "com.chaincontrol.assets.Case"
     condition: (p.pAuth.indexOf(x.homePrecinct) >= 0)
     action: ALLOW   
+}
+
+rule OfficerEvidenceAuth{
+    description: "Officers can create and read evidence within their authorized cases"
+    participant (p): "com.chaincontrol.participants.Officer"
+    operation: READ, CREATE
+    resource(x): "com.chaincontrol.assets.Evidence"
+    condition: (p.cAuth.indexOf(x.caseOrigin) >= 0)
+    action: ALLOW   
+}
+
+rule OfficerPrecinctViewership{
+    description: "Officers can read all case information within authorized precincts"
+    participant (p): "com.chaincontrol.participants.Officer"
+    operation: READ
+    resource(x): "com.chaincontrol.assets.Precinct"
+    condition: (p.pAuth.indexOf(x) >= 0)
+    action: ALLOW
+}
+
+rule ThirdPartyCaseAccess{
+    description: "Third Parties can read information and evidence in their authorized cases"
+    participant (p): "com.chaincontrol.participants.ThirdParty"
+    operation: READ
+    resource(x): "com.chaincontrol.assets.Case"
+    condition: (p.cAuth.indexOf(x) >= 0)
+    action: ALLOW  
+}
+
+rule ThirdPartyEvidenceAccess{
+    description: "Third Parties can read evidence in their authorized cases or that they are explicitly authorized to read"
+    participant (p): "com.chaincontrol.participants.ThirdParty"
+    operation: READ
+    resource(x): "com.chaincontrol.assets.Evidence"
+    condition: ((p.cAuth.indexOf(x.caseOrigin) >= 0) || (p.eAuth.indexOf(x) >=0))
+    action: ALLOW 
 }
