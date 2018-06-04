@@ -34,7 +34,7 @@ participant ThirdParty extends user{
 
 participant CheckoutMgmt extends Officer{
   o String evidenceLocker
-  o Boolean active
+  o Boolean onDuty
 }
 
 participant Administrator extends Officer{
