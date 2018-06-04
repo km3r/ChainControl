@@ -68,7 +68,7 @@ rule AdminAllAccesss{
       description: "Administrators all access"
       participant: "com.chaincontrol.participants.Administrator"
       operation: READ, CREATE, UPDATE
-      resource: "com.chaincontrol.assets"
+      resource: "com.chaincontrol.assets.**"
       condition: ((resource != Precinct) && (participant.pAuth.indexOf(asset.homePrecinct) >= 0))
       action: ALLOW
 }
@@ -140,8 +140,32 @@ rule onlyAuthorizedCheckoutRequests{
     description: "Users may only create a checkout request for authorized evidence"
     participant (p): "com.chaincontrol.participants.**"
     operation: CREATE
-    resource(x): "com.chaincontrol.assets.CheckoutRequest"
+    resource(x): "com.chaincontrol.assets.EvidenceCheckout"
     transaction(tx): "com.chaincontrol.transactions.physicalCheckoutRequest"
     condition: (p.disabled == false && ((p.eAuth.indexOf(tx.evidenceID) >= 0) || (p.cAuth.indexOf(tx.evidenceID.caseOrigin) >=0))) //either evidence explicitly in eAuth array or case within cAuth jurisdiction
     action: ALLOW 
+}
+
+rule SystemACL {
+    description: "System ACL to permit all access"
+    participant: "org.hyperledger.composer.system.Participant"
+    operation: ALL
+    resource: "org.hyperledger.composer.system.**"
+    action: ALLOW
+}
+
+rule NetworkAdminUser {
+    description: "Grant business network administrators full access to user resources"
+    participant: "org.hyperledger.composer.system.NetworkAdmin"
+    operation: ALL
+    resource: "**"
+    action: ALLOW
+}
+
+rule NetworkAdminSystem {
+    description: "Grant business network administrators full access to system resources"
+    participant: "org.hyperledger.composer.system.NetworkAdmin"
+    operation: ALL
+    resource: "org.hyperledger.composer.system.**"
+    action: ALLOW
 }

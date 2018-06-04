@@ -3,12 +3,12 @@
       "composer": "^0.19.0"
     },
     "name": "chaincontrol-network",
-    "version": "0.2.4-deploy.0",
+    "version": "0.3.0",
     "description": "ChainControl is a decentralized evidence management platform",
     "networkImage": "https://hyperledger.github.io/composer-sample-networks/packages/basic-sample-network/networkimage.svg",
     "networkImageanimated": "https://hyperledger.github.io/composer-sample-networks/packages/basic-sample-network/networkimageanimated.svg",
     "scripts": {
-      "prepublish": "mkdirp ./dist && composer archive create --sourceType dir --sourceName . -a ./dist/basic-sample-network.bna",
+      "prepublish":"mkdirp ./dist && composer archive create --sourceType dir --sourceName . -a ./dist/basic-sample-network.bna",
       "pretest": "npm run lint",
       "lint": "eslint .",
       "postlint": "npm run licchk",
