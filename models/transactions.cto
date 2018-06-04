@@ -28,7 +28,7 @@ transaction modifyPermission{
 transaction migrateOfficer{ //.js complete in admin.js
   //ADMIN - change officer's employment precinct
   --> Precinct newPrecinct
-  --> Precinct oldPrecinct
+  --> Precinct oldPrecinct optional
   --> user officer
 }
 
