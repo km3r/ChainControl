@@ -3,14 +3,14 @@ namespace com.chaincontrol.transactions
 import com.chaincontrol.assets.* 
 import com.chaincontrol.participants.*
 
-transaction ReNameCase {
+transaction ReNameCase { //.js complete in case.js
     --> Case myCase
     o String newName
     o String oldName optional
 }
 
 transaction objectPermission { //specify perm parameters (asset type and ID, perm level)
-  o permissionAsset object //asset for permission (precinct, case, or asset)
+  o permissionAsset object //asset for permission (PrecinctPermission, CasePermission, or EvidencePermission)
   o permissionType permission //access to view, authorization to add 
   o String objectID //specify object ID... return invalid if object type doesn't correlate with ID
   --> PermissionRequest request
@@ -25,20 +25,22 @@ transaction modifyPermission{
   o String objectID //ID of asset for new permission level
 }
 
-transaction migrateOfficer{ //ADMIN - change officer's employment precinct
+transaction migrateOfficer{ //.js complete in admin.js
+  //ADMIN - change officer's employment precinct
   --> Precinct newPrecinct
   --> Precinct oldPrecinct
   --> user officer
 }
 
-transaction nullifyOfficer{ //ADMIN - officer fired or permissions stripped
+transaction nullifyOfficer{ //.js complete in admin.js
+  //ADMIN - officer fired or permissions stripped
   --> user officer
 }
 
 transaction physicalCheckoutRequest{
   o String duration
   --> Evidence evidenceID
-  --> user requestor
+  --> user authorized
 }
 
 transaction physicalCheckoutUpdate{
@@ -46,18 +48,21 @@ transaction physicalCheckoutUpdate{
   --> user checkoutMGMT
 }
 
-transaction newCase{  //OFFICER - add case to precinct
+transaction newCase{  //.js complete in case.js REVISE
+  //OFFICER - add case to precinct
   --> Case newCase
-  --> Precinct precinct
+  --> Precinct inPrecinct
 }
 
-transaction newEvidence{  //OFFICER - add evidence to case (req cAuth)
+transaction newEvidence{  //.js complete in case.js REVISE
+  //OFFICER - add evidence to case (req cAuth)
   --> user authorized
   --> Evidence newEvidence optional
   --> Case inCase
 }
 
-transaction closeCase{ //ADMIN - mark case as closed (change 'open' boolean to false)
+transaction closeCase{ //.js complete in case.js
+  //ADMIN - mark case as closed (change 'open' boolean to false)
   --> Case caseID
   --> user closer
 }

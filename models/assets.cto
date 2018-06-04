@@ -33,6 +33,7 @@ asset Evidence identified by evidenceID {
     o EvidenceType type
     o Boolean accessAvailable //(?)
     --> Case caseOrgin
+    --> Precinct homePrecinct
 }
 
 enum requestState{
@@ -79,6 +80,7 @@ enum checkoutNote{
   o Approved
   o Withdrawn
   o Returned
+  o Unauthorized
 }
 asset EvidenceCheckout identified by requestID {
   o String requestID
